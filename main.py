@@ -59,7 +59,7 @@ def exp():
 
 
 @app.route('/users/list/')
-def users():
+def users_list():
     import sqlite3
 
     try:
@@ -100,7 +100,7 @@ def users_create():
 
 
 @app.route('/phones/list/')
-def phones():
+def phones_list():
     import sqlite3
 
     try:
@@ -158,6 +158,68 @@ def users_phones():
         connection.close()
 
     return str(result)
+
+
+@app.route('/emails/list/')
+def emails_list():
+    import sqlite3
+
+    try:
+        connection = sqlite3.connect('./db.sqlite3')
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT * FROM emails;")
+        result = cursor.fetchall()
+
+        connection.commit()
+    finally:
+        connection.close()
+
+    return str(result)
+
+
+@app.route('/emails/create/')
+def emails_create():
+
+    email_value = request.args['emailValue']
+    user_id = request.args['userId']
+
+    try:
+        connection = sqlite3.connect('./db.sqlite3')
+        cursor = connection.cursor()
+
+        query = f"INSERT INTO emails VALUES (null, '{email_value}', {user_id});"
+        print(query)
+        cursor.execute(query)
+        connection.commit()
+    finally:
+        connection.close()
+
+    return "OK"
+
+
+@app.route('/users/emails/')
+def users_emails():
+
+    try:
+        connection = sqlite3.connect('./db.sqlite3')
+        cursor = connection.cursor()
+
+        query = f"""
+        SELECT emails.id, emails.value
+        FROM emails
+        INNER JOIN users ON emails.user_id = users_id;
+        """
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        connection.commit()
+    finally:
+        connection.close()
+
+    return str(result)
+
+
 
 
 
