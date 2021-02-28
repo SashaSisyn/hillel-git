@@ -148,7 +148,7 @@ def users_phones():
         query = f"""
         SELECT phones.id, phones.value, users.first_name,users.last_name
         FROM phones
-        INNER JOIN users ON phones.user_id = users_id;
+        INNER JOIN users ON phones.user_id = user_id;
         """
         cursor.execute(query)
         result = cursor.fetchall()
@@ -208,7 +208,7 @@ def users_emails():
         query = f"""
         SELECT emails.id, emails.value
         FROM emails
-        INNER JOIN users ON emails.user_id = users_id;
+        INNER JOIN users ON emails.user_id = user_id;
         """
         cursor.execute(query)
         result = cursor.fetchall()
